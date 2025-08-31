@@ -15,7 +15,7 @@ func IninDB() *pgxpool.Pool {
 		return nil
 	}
 
-	var userBD, pasBD, nameBD string = os.Getenv("POSTGRE_USER"),
+	var userBD, pasBD, nameBD string = os.Getenv("POSTGRES_USER"),
 		os.Getenv("POSTGRES_PASSWORD"),
 		os.Getenv("DB_POSTGRES")
 	connStr := fmt.Sprintf("postgres://%s:%s@localhost:5432/%s?sslmode=disable", userBD, pasBD, nameBD)
