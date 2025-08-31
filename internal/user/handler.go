@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"myApp/internal/auth"
 	"myApp/internal/server"
 	"net/http"
 	"time"
-	"myApp/internal/auth"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -78,9 +79,9 @@ func Login(s *server.Server) http.HandlerFunc {
 			return
 		}
 
-		var UserInfo struct{
-			id int
-			email string
+		var UserInfo struct {
+			id       int
+			email    string
 			password string
 		}
 		query := `SELECT id, email, password FROM users WHERE email = $1`
@@ -100,7 +101,7 @@ func Login(s *server.Server) http.HandlerFunc {
 		}
 
 		tok, err := auth.GenerateToken(UserInfo.id, UserInfo.email)
-		if err != nil{
+		if err != nil {
 			fmt.Println(err)
 			w.WriteHeader(401)
 			w.Write([]byte("Не удалось создать токен"))
