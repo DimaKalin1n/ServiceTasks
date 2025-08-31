@@ -1,7 +1,9 @@
 package server
 
-import "github.com/jackc/pgx/v5"
+import (
+	"github.com/jackc/pgx/v5/pgxpool"
+)
 
 type Server struct {
-	DB *pgx.Conn
+	DB *pgxpool.Pool
 }
