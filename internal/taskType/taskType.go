@@ -57,6 +57,7 @@ func GetAllTasksType(s *server.Server) http.HandlerFunc {
 		query := `SELECT * FROM tasktype`
 		rows, err := s.DB.Query(context.Background(), query)
 		defer rows.Close()
+
 		if err != nil {
 			w.WriteHeader(500)
 			w.Write([]byte("Ошибка запроса к серверу"))
@@ -73,14 +74,14 @@ func GetAllTasksType(s *server.Server) http.HandlerFunc {
 			}
 			typeList = append(typeList, taskType)
 		}
-		lsTasks, errMarsh := json.Marshal(typeList)
+		_, errMarsh := json.Marshal(typeList)
 		if errMarsh != nil {
 			w.WriteHeader(503)
 			w.Write([]byte("Ошибка преобразования json для ответа"))
 			return
 		}
 		w.WriteHeader(200)
-		json.NewEncoder(w).Encode(lsTasks)
+		json.NewEncoder(w).Encode(typeList)
 
 	}
 }
