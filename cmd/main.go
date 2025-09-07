@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"myApp/internal/database"
+	mylogger "myApp/internal/myLogger"
 	"myApp/internal/server"
 	tasktype "myApp/internal/taskType"
 	"myApp/internal/user"
 	"net/http"
+	"myApp/internal/serveStart"
 )
 
 func main() {
@@ -20,7 +21,8 @@ func main() {
 	http.HandleFunc("/createTaskType", tasktype.CreateTaskType(srv))
 	http.HandleFunc("/getAllType", tasktype.GetAllTasksType(srv))
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		fmt.Println("Ошибка сервера")
+	mylogger := mylogger.NewMyLogger()
+	if errServ := serverStart.NewServer(mylogger); errServ != nil{
+		mylogger.ErrorLog("ошибка при попытке запуска сервера")
 	}
 }
