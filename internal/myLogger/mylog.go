@@ -1,31 +1,15 @@
 package mylogger
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
-
-	"github.com/gofrs/uuid"
 )
 
-type MyLog struct {
-	slog *slog.Logger
-}
+func NewMyLogger() *slog.Logger {
 
-func GenerationTraceId() (string, error) {
-	randomUuid, err := uuid.NewV4()
+	file, err := os.OpenFile("internal/myLogger/logFile.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
-		fmt.Println("ошибка создания uuid " + err.Error())
-		return "", err
-	}
-	return randomUuid.String(), nil
-}
-
-func NewMyLogger() *MyLog {
-
-	file, err := os.OpenFile("logFile.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil {
-		fmt.Println("Не удалось открыть файл для работы")
+		slog.Error("Не удалось открыть файл для записи логов")
 		return nil
 	}
 
@@ -37,13 +21,5 @@ func NewMyLogger() *MyLog {
 
 	mylog := slog.New(logHandler).With("service", "myApp")
 
-	return &MyLog{slog: mylog}
-}
-
-func (log *MyLog) InfoLog(request_id string, msg string) {
-	log.slog.Info(msg)
-}
-
-func (log *MyLog) ErrorLog(msg string) {
-	log.slog.Error(msg)
+	return mylog
 }

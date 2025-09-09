@@ -23,6 +23,6 @@ func main() {
 
 	mylogger := mylogger.NewMyLogger()
 	if errServ := serverStart.NewServer(mylogger); errServ != nil{
-		mylogger.ErrorLog("ошибка при попытке запуска сервера")
+		mylogger.Error("ошибка при попытке запуска сервера")
 	}
 }
