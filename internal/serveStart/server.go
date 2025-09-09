@@ -2,8 +2,8 @@ package serverStart
 
 import (
 	"fmt"
+	"log/slog"
 	"myApp/internal/handlers"
-	mylogger "myApp/internal/myLogger"
 	"net/http"
 	"os"
 	"time"
@@ -11,14 +11,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func NewServer(logger *mylogger.MyLog) error {
-	trace_id, errGen := mylogger.GenerationTraceId()
-	if errGen != nil {
-		logger.ErrorLog("Не удалось создать trace_id")
-	} else {
-		logger.InfoLog(trace_id, "удалось создать uuid")
-	}
-
+func NewServer(log *slog.Logger) error {
 	errEnv := godotenv.Load()
 	if errEnv != nil {
 		fmt.Println("Ошибка при открытии env file")
@@ -35,9 +28,9 @@ func NewServer(logger *mylogger.MyLog) error {
 	}
 
 	if errServ := server.ListenAndServe(); errServ != nil {
-		logger.ErrorLog("ошибка при запуске сервера")
+		log.Error("ошибка при запуске сервера", "error:", errServ.Error())
 		return errServ
 	}
-	logger.InfoLog(trace_id, "Сервер запущен")
+	log.Info("Сервер запущен")
 	return nil
 }
