@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func NewMyLogger() *slog.Logger {
+func NewMyLogger(service string) *slog.Logger {
 
 	file, err := os.OpenFile("internal/myLogger/logFile.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
@@ -19,7 +19,7 @@ func NewMyLogger() *slog.Logger {
 
 	logHandler := slog.NewJSONHandler(file, logOpt)
 
-	mylog := slog.New(logHandler).With("service", "myApp")
+	mylog := slog.New(logHandler).With("service", service)
 
 	return mylog
 }
